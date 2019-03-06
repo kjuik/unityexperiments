@@ -1,8 +1,13 @@
 ﻿using System;
+using UnityEngine;
 
 [Serializable]
 public class GameSave
 {
-    //for testing purposes
-    public int x = 5;
+    [Serializable]
+    public struct SavedTransform
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+    }
 }

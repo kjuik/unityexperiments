@@ -1,46 +1,45 @@
-﻿using System.IO;
-using System.Xml.Serialization;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
 namespace CompleteProject
 {
-    public class SavingLoadingManager : MonoBehaviour
+    public class SavingLoadingManager : AbstractSavingLoadingManager<CurrentGameSave>
     {
-        string SavePath => Application.persistentDataPath + "/QuickSave.sav";
+        [SerializeField]
+        private Transform PlayerTransform;
+        [SerializeField]
+        private Transform CameraTransform;
 
-        public void SaveGame()
+        protected override void ApplyGameSave(CurrentGameSave save)
         {
-            var save = new GameSave(); 
-            WriteToFile(save);
+            PlayerTransform.position = save.PlayerTransform.Position;
+            PlayerTransform.rotation = save.PlayerTransform.Rotation;
+
+            CameraTransform.position = save.CameraTransform.Position;
+            CameraTransform.rotation = save.CameraTransform.Rotation;
         }
 
-        public void LoadGame()
+        protected override CurrentGameSave CreateGameSave()
         {
-            var save = ReadFromFile();
-            Debug.Log(save.x);
+            var save = new CurrentGameSave();
+
+            save.PlayerTransform.Position = PlayerTransform.position;
+            save.PlayerTransform.Rotation = PlayerTransform.rotation;
+
+            save.CameraTransform.Position = CameraTransform.position;
+            save.CameraTransform.Rotation = CameraTransform.rotation;
+
+            return save;
         }
 
-        void WriteToFile(GameSave save)
+        private void Update()
         {
-            using (var stream = File.Open(SavePath, FileMode.Create, FileAccess.Write))
-            {
-                new XmlSerializer(typeof(GameSave)).Serialize(stream, save);
-            }
-        }
+            if (Input.GetKeyDown(KeyCode.F5))
+                SaveGame();
 
-        GameSave ReadFromFile()
-        {
-            using (var stream = File.Open(SavePath, FileMode.Open, FileAccess.Read))
-            {
-                return new XmlSerializer(typeof(GameSave)).Deserialize(stream) as GameSave;
-            }
-        }
-
-        [ContextMenu("TestSaveLoad")]
-        public void TestSaveLoad()
-        {
-            SaveGame();
-            LoadGame();
+            if (Input.GetKeyDown(KeyCode.F9))
+                LoadGame();
         }
     }
 }
