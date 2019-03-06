@@ -22,7 +22,7 @@ namespace CompleteProject
 
         void WriteToFile(GameSave save)
         {
-            using (var stream = File.Open(SavePath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (var stream = File.Open(SavePath, FileMode.Create, FileAccess.Write))
             {
                 new XmlSerializer(typeof(GameSave)).Serialize(stream, save);
             }
