@@ -1,5 +1,8 @@
-﻿public class CurrentGameSave: GameSave
+﻿using CompleteProject;
+
+public class CurrentGameSave: GameSave
 {
-    public SavedTransform PlayerTransform;
-    public SavedTransform CameraTransform;
+    public PlayerState Player;
+    public CameraState Camera;
+
 }

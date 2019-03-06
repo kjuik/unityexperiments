@@ -3,7 +3,13 @@ using System.Collections;
 
 namespace CompleteProject
 {
-    public class CameraFollow : MonoBehaviour
+    public class CameraState : ObjectState
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+    }
+
+    public class CameraFollow : MonoBehaviour, ISaveable<CameraState>
     {
         public Transform target;            // The position that that camera will be following.
         public float smoothing = 5f;        // The speed with which the camera will be following.
@@ -26,6 +32,15 @@ namespace CompleteProject
 
             // Smoothly interpolate between the camera's current position and it's target position.
             transform.position = Vector3.Lerp (transform.position, targetCamPos, smoothing * Time.deltaTime);
+        }
+
+        public CameraState Save() => 
+            new CameraState() { Position = transform.position, Rotation = transform.rotation };
+
+        public void Load(CameraState state)
+        {
+            transform.position = state.Position;
+            transform.rotation = state.Rotation;
         }
     }
 }

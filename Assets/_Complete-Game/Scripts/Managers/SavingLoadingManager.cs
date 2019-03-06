@@ -7,30 +7,22 @@ namespace CompleteProject
     public class SavingLoadingManager : AbstractSavingLoadingManager<CurrentGameSave>
     {
         [SerializeField]
-        private Transform PlayerTransform;
+        private PlayerHealth Player;
         [SerializeField]
-        private Transform CameraTransform;
+        private CameraFollow Camera;
 
         protected override void ApplyGameSave(CurrentGameSave save)
         {
-            PlayerTransform.position = save.PlayerTransform.Position;
-            PlayerTransform.rotation = save.PlayerTransform.Rotation;
-
-            CameraTransform.position = save.CameraTransform.Position;
-            CameraTransform.rotation = save.CameraTransform.Rotation;
+            Player.Load(save.Player);
+            Camera.Load(save.Camera);
         }
 
         protected override CurrentGameSave CreateGameSave()
         {
-            var save = new CurrentGameSave();
-
-            save.PlayerTransform.Position = PlayerTransform.position;
-            save.PlayerTransform.Rotation = PlayerTransform.rotation;
-
-            save.CameraTransform.Position = CameraTransform.position;
-            save.CameraTransform.Rotation = CameraTransform.rotation;
-
-            return save;
+            return new CurrentGameSave() {
+                Player = Player.Save(),
+                Camera = Camera.Save()
+            };
         }
 
         private void Update()

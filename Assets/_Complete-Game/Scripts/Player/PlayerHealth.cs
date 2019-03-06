@@ -5,7 +5,14 @@ using UnityEngine.SceneManagement;
 
 namespace CompleteProject
 {
-    public class PlayerHealth : MonoBehaviour
+    public class PlayerState : ObjectState
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public int Health;
+    }
+
+    public class PlayerHealth : MonoBehaviour, ISaveable<PlayerState>
     {
         public int startingHealth = 100;                            // The amount of health the player starts the game with.
         public int currentHealth;                                   // The current health the player has.
@@ -105,6 +112,20 @@ namespace CompleteProject
         {
             // Reload the level that is currently loaded.
             SceneManager.LoadScene (0);
+        }
+
+        public PlayerState Save() =>
+            new PlayerState() {
+                Position = transform.position,
+                Rotation = transform.rotation,
+                Health = currentHealth
+            };
+
+        public void Load(PlayerState state)
+        {
+            transform.position = state.Position;
+            transform.rotation = state.Rotation;
+            currentHealth = state.Health;
         }
     }
 }
