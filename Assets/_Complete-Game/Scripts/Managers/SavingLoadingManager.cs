@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Linq;
 
 namespace CompleteProject
 {
@@ -10,18 +11,25 @@ namespace CompleteProject
         private PlayerHealth Player;
         [SerializeField]
         private CameraFollow Camera;
+        [SerializeField]
+        private EnemyManager[] EnemyManagers;
 
         protected override void ApplyGameState(CurrentGameState save)
         {
             Player.Load(save.Player);
             Camera.Load(save.Camera);
+            foreach(var manager in EnemyManagers)
+                manager.Load(save.EnemyManagers
+                    .Where(x => x.PrefabName == manager.enemyPrefab.name)
+                    .First());
         }
 
         protected override CurrentGameState GenerateGameState()
         {
             return new CurrentGameState() {
                 Player = Player.Save(),
-                Camera = Camera.Save()
+                Camera = Camera.Save(),
+                EnemyManagers = EnemyManagers.Select(x => x.Save()).ToArray()
             };
         }
 

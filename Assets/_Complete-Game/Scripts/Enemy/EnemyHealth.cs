@@ -1,8 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CompleteProject
 {
-    public class EnemyHealth : MonoBehaviour
+    public class EnemyState: ObjectState
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public int Health;
+    }
+
+    public class EnemyHealth : MonoBehaviour, ISaveable<EnemyState>
     {
         public int startingHealth = 100;            // The amount of health the enemy starts the game with.
         public int currentHealth;                   // The current health the enemy has.
@@ -18,6 +26,7 @@ namespace CompleteProject
         bool isDead;                                // Whether the enemy is dead.
         bool isSinking;                             // Whether the enemy has started sinking through the floor.
 
+        public event Action<EnemyHealth> OnDeath;
 
         void Awake ()
         {
@@ -75,6 +84,7 @@ namespace CompleteProject
         {
             // The enemy is dead.
             isDead = true;
+            OnDeath?.Invoke(this);
 
             // Turn the collider into a trigger so shots can pass through it.
             capsuleCollider.isTrigger = true;
@@ -104,6 +114,21 @@ namespace CompleteProject
 
             // After 2 seconds destory the enemy.
             Destroy (gameObject, 2f);
+        }
+
+        public EnemyState Save() =>
+            new EnemyState()
+            {
+                Position = transform.position,
+                Rotation = transform.rotation,
+                Health = currentHealth
+            };
+
+        public void Load(EnemyState state)
+        {
+            transform.position = state.Position;
+            transform.rotation = state.Rotation;
+            currentHealth = state.Health;
         }
     }
 }
