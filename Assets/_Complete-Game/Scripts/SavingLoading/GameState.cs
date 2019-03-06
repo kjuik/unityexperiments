@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class GameSave
+public class GameState
 {
     
 }

@@ -4,22 +4,22 @@ using System.Collections;
 
 namespace CompleteProject
 {
-    public class SavingLoadingManager : AbstractSavingLoadingManager<CurrentGameSave>
+    public class SavingLoadingManager : AbstractSavingLoadingManager<CurrentGameState>
     {
         [SerializeField]
         private PlayerHealth Player;
         [SerializeField]
         private CameraFollow Camera;
 
-        protected override void ApplyGameSave(CurrentGameSave save)
+        protected override void ApplyGameState(CurrentGameState save)
         {
             Player.Load(save.Player);
             Camera.Load(save.Camera);
         }
 
-        protected override CurrentGameSave CreateGameSave()
+        protected override CurrentGameState GenerateGameState()
         {
-            return new CurrentGameSave() {
+            return new CurrentGameState() {
                 Player = Player.Save(),
                 Camera = Camera.Save()
             };

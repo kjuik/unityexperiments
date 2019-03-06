@@ -2,16 +2,15 @@
 using System.Xml.Serialization;
 using UnityEngine;
 
-public abstract class AbstractSavingLoadingManager<T> : MonoBehaviour where T: GameSave
+public abstract class AbstractSavingLoadingManager<T> : MonoBehaviour where T: GameState
 {
     string SavePath => Application.persistentDataPath + "/QuickSave.sav";
 
-    public void SaveGame() => WriteToFile(CreateGameSave());
+    public void SaveGame() => WriteToFile(GenerateGameState());
+    public void LoadGame() => ApplyGameState(ReadFromFile());
 
-    public void LoadGame() => ApplyGameSave(ReadFromFile());
-
-    protected abstract T CreateGameSave();
-    protected abstract void ApplyGameSave(T save);
+    protected abstract T GenerateGameState();
+    protected abstract void ApplyGameState(T save);
 
     void WriteToFile(T save)
     {
@@ -28,7 +27,4 @@ public abstract class AbstractSavingLoadingManager<T> : MonoBehaviour where T: G
             return new XmlSerializer(typeof(T)).Deserialize(stream) as T;
         }
     }
-
-    
-    
 }
