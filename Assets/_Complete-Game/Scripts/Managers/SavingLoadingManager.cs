@@ -35,14 +35,5 @@ namespace CompleteProject
                 EnemyManagers = EnemyManagers.Select(x => x.Save()).ToArray()
             };
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F5))
-                SaveGame();
-
-            if (Input.GetKeyDown(KeyCode.F9))
-                LoadGame();
-        }
     }
 }
