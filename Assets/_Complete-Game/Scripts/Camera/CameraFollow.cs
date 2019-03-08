@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 namespace CompleteProject
 {
+    [Serializable]
     public class CameraState : ObjectState
     {
         public Vector3 Position;

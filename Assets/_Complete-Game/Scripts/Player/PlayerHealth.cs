@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace CompleteProject
 {
+    [Serializable]
     public class PlayerState : ObjectState
     {
         public Vector3 Position;

@@ -1,5 +1,8 @@
-﻿namespace CompleteProject
+﻿using System;
+
+namespace CompleteProject
 {
+    [Serializable]
     public class CompleteGameState : GameState
     {
         public int Score;

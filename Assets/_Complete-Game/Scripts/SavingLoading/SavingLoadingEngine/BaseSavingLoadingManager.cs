@@ -1,5 +1,6 @@
 ﻿using System.IO;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 /// <summary>
@@ -11,9 +12,30 @@ using UnityEngine;
 /// <typeparam name="T">
 /// The subclass of GameState that holds your game-specific save data.
 /// </typeparam>
-public abstract class BaseSavingLoadingManager<T> : MonoBehaviour where T: GameState
+public abstract class BaseSavingLoadingManager<T> : MonoBehaviour where T : GameState
 {
     protected virtual string SavePath => Application.persistentDataPath + "/QuickSave.sav";
+
+    BinaryFormatter binaryFormatter;
+
+    public BaseSavingLoadingManager() => InitFormatter();
+
+    void InitFormatter()
+    {
+        binaryFormatter = new BinaryFormatter();
+        var ss = new SurrogateSelector();
+
+        //Needed, because Vector3 and Quaternion aren't serializable by default.
+        ss.AddSurrogate(typeof(Vector3),
+                        new StreamingContext(StreamingContextStates.All),
+                        new Vector3SerializationSurrogate());
+
+        ss.AddSurrogate(typeof(Quaternion),
+                        new StreamingContext(StreamingContextStates.All),
+                        new QuaternionSerializationSurrogate());
+
+        binaryFormatter.SurrogateSelector = ss;
+    }
 
     public void SaveGame() => WriteToFile(GenerateGameState());
     public void LoadGame() => ApplyGameState(ReadFromFile());
@@ -34,7 +56,7 @@ public abstract class BaseSavingLoadingManager<T> : MonoBehaviour where T: GameS
     {
         using (var stream = File.Open(SavePath, FileMode.Create, FileAccess.Write))
         {
-            new XmlSerializer(typeof(T)).Serialize(stream, save);
+            binaryFormatter.Serialize(stream, save);
         }
     }
     
@@ -42,7 +64,7 @@ public abstract class BaseSavingLoadingManager<T> : MonoBehaviour where T: GameS
     {
         using (var stream = File.Open(SavePath, FileMode.Open, FileAccess.Read))
         {
-            return new XmlSerializer(typeof(T)).Deserialize(stream) as T;
+            return binaryFormatter.Deserialize(stream) as T;
         }
     }
 }

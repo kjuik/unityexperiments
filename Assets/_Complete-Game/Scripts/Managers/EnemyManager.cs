@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace CompleteProject
 {
+    [System.Serializable]
     public class EnemyManagerState : ObjectState
     {
         public string PrefabName;

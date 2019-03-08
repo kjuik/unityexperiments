@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace CompleteProject
 {
+    [Serializable]
     public class EnemyState: ObjectState
     {
         public Vector3 Position;
