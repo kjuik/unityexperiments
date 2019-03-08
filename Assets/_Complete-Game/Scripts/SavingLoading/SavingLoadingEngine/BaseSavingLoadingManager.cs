@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -54,17 +55,32 @@ public abstract class BaseSavingLoadingManager<T> : MonoBehaviour where T : Game
 
     void WriteToFile(T save)
     {
-        using (var stream = File.Open(SavePath, FileMode.Create, FileAccess.Write))
+        try
         {
-            binaryFormatter.Serialize(stream, save);
+            using (var stream = File.Open(SavePath, FileMode.Create, FileAccess.Write))
+            {
+                binaryFormatter.Serialize(stream, save);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Could not write to file: {e}");
         }
     }
-    
+
     T ReadFromFile()
     {
-        using (var stream = File.Open(SavePath, FileMode.Open, FileAccess.Read))
+        try
         {
-            return binaryFormatter.Deserialize(stream) as T;
+            using (var stream = File.Open(SavePath, FileMode.Open, FileAccess.Read))
+            {
+                return binaryFormatter.Deserialize(stream) as T;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Could not read from file: {e}");
+            return null;
         }
     }
 }

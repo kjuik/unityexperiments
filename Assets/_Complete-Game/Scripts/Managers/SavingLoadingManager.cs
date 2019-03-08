@@ -12,13 +12,16 @@ namespace CompleteProject
         [SerializeField]
         private EnemyManager[] EnemyManagers;
 
-        protected override void ApplyGameState(CompleteGameState save)
+        protected override void ApplyGameState(CompleteGameState state)
         {
-            ScoreManager.score = save.Score;
-            Player.Load(save.Player);
-            Camera.Load(save.Camera);
+            if (state == null)
+                return;
+
+            ScoreManager.score = state.Score;
+            Player.Load(state.Player);
+            Camera.Load(state.Camera);
             foreach(var manager in EnemyManagers)
-                manager.Load(save.EnemyManagers
+                manager.Load(state.EnemyManagers
                     .Where(x => x.PrefabName == manager.enemyPrefab.name)
                     .First());
         }
