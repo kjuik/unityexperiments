@@ -2,6 +2,8 @@
 {
     public class CompleteGameState : GameState
     {
+        public int Score;
+
         public PlayerState Player;
         public CameraState Camera;
 

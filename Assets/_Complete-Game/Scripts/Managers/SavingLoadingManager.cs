@@ -6,6 +6,8 @@ namespace CompleteProject
     public class SavingLoadingManager : BaseSavingLoadingManager<CompleteGameState>
     {
         [SerializeField]
+        private ScoreManager ScoreManager;
+        [SerializeField]
         private PlayerHealth Player;
         [SerializeField]
         private CameraFollow Camera;
@@ -14,6 +16,7 @@ namespace CompleteProject
 
         protected override void ApplyGameState(CompleteGameState save)
         {
+            ScoreManager.score = save.Score;
             Player.Load(save.Player);
             Camera.Load(save.Camera);
             foreach(var manager in EnemyManagers)
@@ -25,6 +28,7 @@ namespace CompleteProject
         protected override CompleteGameState GenerateGameState()
         {
             return new CompleteGameState() {
+                Score = ScoreManager.score,
                 Player = Player.Save(),
                 Camera = Camera.Save(),
                 EnemyManagers = EnemyManagers.Select(x => x.Save()).ToArray()
