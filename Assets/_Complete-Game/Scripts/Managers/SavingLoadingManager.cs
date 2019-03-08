@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using System.Linq;
 
 namespace CompleteProject
 {
-    public class SavingLoadingManager : AbstractSavingLoadingManager<CurrentGameState>
+    public class SavingLoadingManager : BaseSavingLoadingManager<CompleteGameState>
     {
         [SerializeField]
         private PlayerHealth Player;
@@ -14,7 +12,7 @@ namespace CompleteProject
         [SerializeField]
         private EnemyManager[] EnemyManagers;
 
-        protected override void ApplyGameState(CurrentGameState save)
+        protected override void ApplyGameState(CompleteGameState save)
         {
             Player.Load(save.Player);
             Camera.Load(save.Camera);
@@ -24,9 +22,9 @@ namespace CompleteProject
                     .First());
         }
 
-        protected override CurrentGameState GenerateGameState()
+        protected override CompleteGameState GenerateGameState()
         {
-            return new CurrentGameState() {
+            return new CompleteGameState() {
                 Player = Player.Save(),
                 Camera = Camera.Save(),
                 EnemyManagers = EnemyManagers.Select(x => x.Save()).ToArray()

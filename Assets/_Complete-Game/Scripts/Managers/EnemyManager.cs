@@ -13,10 +13,11 @@ namespace CompleteProject
     public class EnemyManager : MonoBehaviour, ISaveable<EnemyManagerState>
     {
         public PlayerHealth playerHealth;       // Reference to the player's heatlh.
-        public EnemyHealth enemyPrefab;                // The enemy prefab to be spawned.
+        public EnemyHealth enemyPrefab;         // The enemy prefab to be spawned.
         public float spawnTime = 3f;            // How long between each spawn.
         public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
 
+        [HideInInspector]
         public List<EnemyHealth> Instances = new List<EnemyHealth>();
 
         void Start ()
