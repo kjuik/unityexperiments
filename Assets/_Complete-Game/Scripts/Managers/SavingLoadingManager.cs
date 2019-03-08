@@ -6,8 +6,6 @@ namespace CompleteProject
     public class SavingLoadingManager : BaseSavingLoadingManager<CompleteGameState>
     {
         [SerializeField]
-        private ScoreManager ScoreManager;
-        [SerializeField]
         private PlayerHealth Player;
         [SerializeField]
         private CameraFollow Camera;
